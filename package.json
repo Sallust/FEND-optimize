@@ -1,0 +1,23 @@
+{
+  "name": "optim2",
+  "version": "1.0.0",
+  "description": "Web optimization project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sallust/FEND-optimize.git"
+  },
+  "author": "Daniyom Haile",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sallust/FEND-optimize/issues"
+  },
+  "homepage": "https://github.com/Sallust/FEND-optimize#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "ngrok": "^0.2.2"
+  }
+}
