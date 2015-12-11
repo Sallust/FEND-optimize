@@ -18,6 +18,9 @@
   "homepage": "https://github.com/Sallust/FEND-optimize#readme",
   "devDependencies": {
     "gulp": "^3.9.0",
-    "ngrok": "^0.2.2"
+    "gulp-exit": "0.0.2",
+    "ngrok": "^0.2.2",
+    "psi": "^2.0.2",
+    "run-sequence": "^1.1.5"
   }
 }
