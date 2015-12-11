@@ -7,7 +7,10 @@ var psi = require('psi');
 var sequence = require('run-sequence');
 var imageResize = require('gulp-image-resize');
 var rename = require('gulp-rename');
-var gm = require('gulp-gm');
+//var gm = require('gulp-gm');
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
+
 var site = '';
 
 
@@ -91,4 +94,10 @@ gulp.task('resize-test', function() {
     	imageMagick : true
     	 }))
   	.pipe(gulp.dest("dist")); // ./dist/main/text/ciao/goodbye.md
+})
+
+gulp.task('imagemin', function () {
+	gulp.src('img/*.jpg')
+	.pipe(imagemin())
+	.pipe(gulp.dest('dist'));
 })
