@@ -5,7 +5,11 @@ var gulp = require('gulp');
 var ngrok = require('ngrok');
 var psi = require('psi');
 var sequence = require('run-sequence');
+var imageResize = require('gulp-image-resize');
+var rename = require('gulp-rename');
+var gm = require('gulp-gm');
 var site = '';
+
 
 
 //create a task to run ngrok and grab the tunnel url it is creating
@@ -63,4 +67,28 @@ gulp.task('psi', ['psi-seq'], function() {
   	process.exit();
   },10000)
   //process.exit();
+})
+/*
+gulp.task('resize', function () {
+  gulp.src('test.png')
+    .pipe(imageResize({
+      width : 100
+    }))
+    .pipe(gulp.dest('dist'));
+});
+*/
+gulp.task('resize', function () {
+  gulp.src('views/images/pizzeria.jpg')
+    .pipe(imageResize({ width : 500 }))
+    .pipe(rename(function (path) { path.basename += '-100'; }))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('resize-test', function() {
+	gulp.src('views/images/pizzeria.jpg')
+    .pipe(imageResize({
+    	width : 500,
+    	imageMagick : true
+    	 }))
+  	.pipe(gulp.dest("dist")); // ./dist/main/text/ciao/goodbye.md
 })
