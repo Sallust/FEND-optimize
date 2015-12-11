@@ -11,6 +11,10 @@ var rename = require('gulp-rename');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
 
+var inline = require('gulp-inline');
+var uglify = require('gulp-uglify');
+var minifyCss = require('gulp-minify-css');
+
 var site = '';
 
 
@@ -100,4 +104,14 @@ gulp.task('imagemin', function () {
 	gulp.src('img/*.jpg')
 	.pipe(imagemin())
 	.pipe(gulp.dest('dist'));
+})
+
+gulp.task('inline', function() {
+	gulp.src('index.html')
+	.pipe(inline({
+		js: uglify,
+		css:minifyCss,
+		disabledTypes: ['svg','img']
+	}))
+	.pipe(gulp.dest('dist'))
 })
