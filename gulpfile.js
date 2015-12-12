@@ -15,6 +15,8 @@ var inline = require('gulp-inline');
 var uglify = require('gulp-uglify');
 var minifyCss = require('gulp-minify-css');
 
+var htmlmin = require('gulp-htmlmin');
+
 var site = '';
 
 
@@ -114,4 +116,13 @@ gulp.task('inline', function() {
 		disabledTypes: ['svg','img']
 	}))
 	.pipe(gulp.dest('dist'))
+})
+
+gulp.task('minify-html', function() {
+	gulp.src('index.html')
+	.pipe(htmlmin({
+		collapseWhitespace: true,
+		removeComments: true
+	}))
+	.pipe(gulp.dest('dist'));
 })
