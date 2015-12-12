@@ -17,6 +17,8 @@ var minifyCss = require('gulp-minify-css');
 
 var htmlmin = require('gulp-htmlmin');
 
+var del = require('del');
+
 var site = '';
 
 
@@ -88,9 +90,12 @@ gulp.task('resize', function () {
 */
 gulp.task('resize', function () {
   gulp.src('views/images/pizzeria.jpg')
-    .pipe(imageResize({ width : 500 }))
-    .pipe(rename(function (path) { path.basename += '-100'; }))
-    .pipe(gulp.dest('dist'));
+    .pipe(imageResize({
+    	width : 100,
+    	imageMagick : true
+    	 }))
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('resize-test', function() {
@@ -105,7 +110,7 @@ gulp.task('resize-test', function() {
 gulp.task('imagemin', function () {
 	gulp.src('img/*.jpg')
 	.pipe(imagemin())
-	.pipe(gulp.dest('dist'));
+	.pipe(gulp.dest('dist/img'));
 })
 
 gulp.task('inline', function() {
@@ -126,3 +131,28 @@ gulp.task('minify-html', function() {
 	}))
 	.pipe(gulp.dest('dist'));
 })
+
+gulp.task('optimize-stack', function() {
+	gulp.src('index.html')
+	.pipe(inline({
+		js: uglify,
+		css:minifyCss,
+		disabledTypes: ['svg','img']
+	}))
+	.pipe(htmlmin({
+		collapseWhitespace: true,
+		removeComments: true
+	}))
+	.pipe(gulp.dest('dist'));
+})
+
+gulp.task('clean', function(cb) {
+	del(['dist/*'], cb);
+})
+/*
+gulp.task('dry-run-erase', function() {
+	del(['dist/*'], {dryRun: true}).then(paths {
+	console.log('Files and folders that would be deleted:\n', paths.join('\n'));
+});
+})
+*/
