@@ -19,6 +19,8 @@ var htmlmin = require('gulp-htmlmin');
 
 var del = require('del');
 
+//var gzip = require('gulp-gzip');
+
 var site = '';
 
 
@@ -118,7 +120,8 @@ gulp.task('inline', function() {
 	.pipe(inline({
 		js: uglify,
 		css:minifyCss,
-		disabledTypes: ['svg','img']
+		disabledTypes: ['svg','img'],
+		ignore: ['css/print.css', 'js/perfmatters.js']
 	}))
 	.pipe(gulp.dest('dist'))
 })
@@ -137,12 +140,14 @@ gulp.task('optimize-stack', function() {
 	.pipe(inline({
 		js: uglify,
 		css:minifyCss,
-		disabledTypes: ['svg','img']
+		disabledTypes: ['svg','img'],
+		ignore: ['css/print.css', 'js/perfmatters.js', 'js/analytics.js']
 	}))
 	.pipe(htmlmin({
 		collapseWhitespace: true,
 		removeComments: true
 	}))
+	//.pipe(gzip()) did not do what I thought it did, lol
 	.pipe(gulp.dest('dist'));
 })
 
