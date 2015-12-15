@@ -421,7 +421,7 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-    // Changes the slider value to a percent width
+    // returns the percent to be used to resize pizza
   function sizeSwitcher (size) {
       switch(size) {
         case "1":
@@ -435,14 +435,14 @@ var resizePizzas = function(size) {
       }
     }
 
-  // Iterates through pizza elements on the page and changes their widths
+  // Simply changes width of pizza to new percentage value
   var allThePizzas = document.querySelectorAll(".randomPizzaContainer")
   function changePizzaSizes(newWidth) {
     for (var i = 0; i < allThePizzas.length; i++) {
       allThePizzas[i].style.width = newWidth + "%";
     }
   }
-
+  //uses percent returned from sizeSwitcher function
   changePizzaSizes(sizeSwitcher(size));
 
   // User Timing API is awesome
@@ -482,18 +482,20 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
+//introduce variables needed for moving pizzas
 var phase = 0;
 var ticking = false;
+
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var length = items.length;
+  var length = items.length; //small JS performance boost by only calling items.length once
   for (var i = 0; i < length; i++) {
-    var phase2 = Math.sin(phase + i % 5);
-    items[i].style.transform = "translateX(" + (100 * phase2) + "px)";
+    var phase2 = Math.sin(phase + i % 5);//same formula with no call to scrollTop
+    items[i].style.transform = "translateX(" + (100 * phase2) + "px)"; //left -> transform = no layout & no paint
   }
   ticking = false;
 
@@ -506,15 +508,16 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
+//scroll event triggers requestAnimation
 function onScroll (evt) {
   if(!ticking) {
-    ticking = true;
+    ticking = true; //when ticking is true, don't request another frame yet
     requestAnimationFrame(updatePositions);
-    phase = (document.body.scrollTop / 1250);
+    phase = (document.body.scrollTop / 1250); //layout scroll value captures once at time of scroll
   }
 }
 
-// runs updatePositions on scroll
+// runs new onScroll function on scroll
 window.addEventListener('scroll', onScroll);
 
 // Generates the sliding pizzas when the page loads.
@@ -527,8 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.style.left = (i % cols) * s + 'px';
-    //elem.basicLeft = (i % cols) * s;
+    elem.style.left = (i % cols) * s + 'px';//left set once and only once at time of load
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
