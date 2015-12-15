@@ -19,11 +19,8 @@ var htmlmin = require('gulp-htmlmin');
 
 var del = require('del');
 
-//var gzip = require('gulp-gzip');
-
+//var gzip = require('gulp-gzip'); //this did not do what I thought it did, lol
 var site = '';
-
-
 
 //create a task to run ngrok and grab the tunnel url it is creating
 gulp.task('ngrok-url', function (cb) {
@@ -36,7 +33,6 @@ gulp.task('ngrok-url', function (cb) {
 });
 
 //PSI tasks for desktop & mobile
-
 gulp.task('psi-desktop', function (cb) {
 	console.log(site);
   	psi(site, {
@@ -56,9 +52,6 @@ gulp.task('psi-mobile', function (cb) {
     strategy: 'mobile'
   }).then(function(data){
   	console.log('Mobile speed score: ' + data.ruleGroups.SPEED.score);
-  	//console.log(data.pageStats);
-
-  	//cb();
   });
   cb();
 });
@@ -81,15 +74,8 @@ gulp.task('psi', ['psi-seq'], function() {
   },10000)
   //process.exit();
 })
-/*
-gulp.task('resize', function () {
-  gulp.src('test.png')
-    .pipe(imageResize({
-      width : 100
-    }))
-    .pipe(gulp.dest('dist'));
-});
-*/
+
+//resize the overszied pizzeria image for use as thumbnail
 gulp.task('resize', function () {
   gulp.src('views/images/pizzeria.jpg')
     .pipe(imageResize({
@@ -100,15 +86,7 @@ gulp.task('resize', function () {
     .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('resize-test', function() {
-	gulp.src('views/images/pizzeria.jpg')
-    .pipe(imageResize({
-    	width : 500,
-    	imageMagick : true
-    	 }))
-  	.pipe(gulp.dest("dist")); // ./dist/main/text/ciao/goodbye.md
-})
-
+//compress images in img folder
 gulp.task('imagemin', function () {
 	gulp.src('img/*.jpg')
 	.pipe(imagemin())
@@ -135,6 +113,7 @@ gulp.task('minify-html', function() {
 	.pipe(gulp.dest('dist'));
 })
 
+//combines above to functions: inlines and then minifies the html
 gulp.task('optimize-stack', function() {
 	gulp.src('index.html')
 	.pipe(inline({
@@ -155,6 +134,16 @@ gulp.task('clean', function(cb) {
 	del(['dist/*'], cb);
 })
 
+gulp.task('watch', function() {
+    gulp.watch('index.html', ['optimize-stack']);
+});
+
+//Move over performant pizza files
+gulp.task('copy-views', function() {
+	gulp.src('views/**')
+		.pipe(gulp.dest('dist/views'));
+})
+
 gulp.task('big-pizza', function () {
   gulp.src('views/images/pizzeria.jpg')
     .pipe(imageResize({
@@ -164,16 +153,3 @@ gulp.task('big-pizza', function () {
     .pipe(imagemin())
     .pipe(gulp.dest('dist'));
 });
-
-gulp.task('small-pizza', function () {
-  gulp.src('views/images/pizza.png')
-    .pipe(imagemin())
-    .pipe(gulp.dest('dist'));
-});
-/*
-gulp.task('dry-run-erase', function() {
-	del(['dist/*'], {dryRun: true}).then(paths {
-	console.log('Files and folders that would be deleted:\n', paths.join('\n'));
-});
-})
-*/
