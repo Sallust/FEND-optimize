@@ -154,6 +154,22 @@ gulp.task('optimize-stack', function() {
 gulp.task('clean', function(cb) {
 	del(['dist/*'], cb);
 })
+
+gulp.task('big-pizza', function () {
+  gulp.src('views/images/pizzeria.jpg')
+    .pipe(imageResize({
+    	width : 720,
+    	imageMagick : true
+    	 }))
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('small-pizza', function () {
+  gulp.src('views/images/pizza.png')
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist'));
+});
 /*
 gulp.task('dry-run-erase', function() {
 	del(['dist/*'], {dryRun: true}).then(paths {
